@@ -1,4 +1,4 @@
-package lu.embellished_duck.dreamscape_engine.actor;
+package lu.embellished_duck.dreamscape_engine.actor.entity;
 
 import lu.embellished_duck.dreamscape_engine.core.GamePanel;
 import lu.embellished_duck.dreamscape_engine.input.KeyHandler;

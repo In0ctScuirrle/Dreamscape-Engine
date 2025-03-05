@@ -2,7 +2,9 @@ package lu.embellished_duck.dreamscape_engine.core;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import lu.embellished_duck.dreamscape_engine.actor.Player;
+import lu.embellished_duck.dreamscape_engine.actor.ActorDeployer;
+import lu.embellished_duck.dreamscape_engine.actor.entity.Player;
+import lu.embellished_duck.dreamscape_engine.actor.objects.SuperObject;
 import lu.embellished_duck.dreamscape_engine.input.KeyHandler;
 import lu.embellished_duck.dreamscape_engine.output.Audio;
 import lu.embellished_duck.dreamscape_engine.physics.CollisionDetector;
@@ -25,9 +27,9 @@ public class GamePanel extends JPanel implements Runnable {
     //===================
     // GRAPHICS SETTINGS
     //===================
-    public final int REAL_TILE_SIZE = 128;//The default tile resolution, separate from objects. (Texture resolution)
-    public final float SCALE = 0.75f;//The scale by which to multiply the REAL_TILE_SIZE.
-    public final int TILE_SIZE = Math.round(REAL_TILE_SIZE * SCALE);
+    public static final int REAL_TILE_SIZE = 128;//The default tile resolution, separate from objects. (Texture resolution)
+    public static final float SCALE = 0.75f;//The scale by which to multiply the REAL_TILE_SIZE.
+    public static final int TILE_SIZE = Math.round(REAL_TILE_SIZE * SCALE);
 
 
     //The maximum number of tile rows and columns that can be displayed on the screen.
@@ -61,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
     //==================
     // SYSTEM VARIABLES
     //==================
+    private final ActorDeployer actorDeployer = ActorDeployer.getInstance(this);
     private final Audio music = new Audio();
     private final Audio soundEffects = new Audio();
     private final CollisionDetector collisionDetector = new CollisionDetector(this);
@@ -69,6 +72,8 @@ public class GamePanel extends JPanel implements Runnable {
     private final KeyHandler keyHandler = KeyHandler.getInstance(this);
 
     private Thread gameThread;
+
+    public final SuperObject[] objects = new SuperObject[10];
 
 
     //=============================
@@ -117,6 +122,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         //playMusic(11);
         gameState = GameState.PLAY;
+
+        actorDeployer.deployObjects();
+
         start();
 
     }//End of Method
@@ -217,6 +225,12 @@ public class GamePanel extends JPanel implements Runnable {
         //Otherwise, there will be issues with layers
 
         tileManager.draw(graphics2D);
+
+        for (SuperObject superObject : objects) {
+
+            if (superObject != null) {superObject.draw(graphics2D, this);}
+
+        }//End of For-Each Loop
 
         player.draw(graphics2D);
 

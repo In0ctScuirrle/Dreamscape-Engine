@@ -10,6 +10,9 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static lu.embellished_duck.dreamscape_engine.core.GamePanel.TILE_SIZE;
+import static lu.embellished_duck.dreamscape_engine.util.ErrorFormats.textureLoadingError;
+
 /**
  * Manages everything related to tiles, it contains functions that load them at the start of the game, store them in the tile library and also allows for placement around the world map
  *
@@ -71,9 +74,9 @@ public class TileManager {
     /**
      * Helper function which initializes the tiles in the tile library
      *
-     * @param index The tile library index of the tile that is to be instantiated
+     * @param index The tile library index that the tile will be instantiated in
      * @param filePath The filepath of the tile's texture
-     * @param collision Whether this tile should contain collision or not
+     * @param collision Whether this tile should use collision or not
      *
      * @since 0.2.0
      *
@@ -87,39 +90,14 @@ public class TileManager {
 
             tileLibrary[index] = new Tile();
             tileLibrary[index].setImage(ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/textures/tile/" + filePath + ".png"))));
-            tileLibrary[index].setImage(imageHelper.scaleImage(tileLibrary[index].getImage(), gamePanel.TILE_SIZE, gamePanel.TILE_SIZE));
+            tileLibrary[index].setImage(imageHelper.scaleImage(tileLibrary[index].getImage(), TILE_SIZE, TILE_SIZE));
             tileLibrary[index].setCollision(collision);
 
         } catch (Exception e) {
 
-            log.error(formattedError(index));
+            log.error(textureLoadingError(index));
 
         }//End of Try-Catch Statement
-
-    }//End of Helper Method
-
-
-    /**
-     * Helper method which can identify an error at a specific index in the tile library
-     *
-     * @param index The index at which the error has occurred
-     * @return Formatted error text
-     *
-     * @since 0.2.0
-     *
-     * @author Will Blanchard
-     */
-    private String formattedError(int index) {
-
-        return """
-                    File IO error at index %s: One of the errors couldn't be found due to either reason |
-                    
-                    1. The image file name isn't spelled correctly
-                    
-                    2. There is a type in the file path, most likely a missing / in front of the assets path
-                    
-                    3. The file extension is incorrect, it needs to be a .png format image
-                    """.formatted(index);
 
     }//End of Helper Method
 
@@ -143,17 +121,17 @@ public class TileManager {
 
             int tileNum = worldManager.mapTileNum[worldCol][worldRow];
 
-            int worldX = worldCol * gamePanel.TILE_SIZE;
-            int worldY = worldRow * gamePanel.TILE_SIZE;
+            int worldX = worldCol * TILE_SIZE;
+            int worldY = worldRow * TILE_SIZE;
 
             int screenX = worldX - gamePanel.getPlayer().worldX + gamePanel.getPlayer().screenX;
             int screenY = worldY - gamePanel.getPlayer().worldY + gamePanel.getPlayer().screenY;
 
             //This If statement ensures that off-screen tiles are not rendered to save on performance (Cause no GPU access cause no LWJGL or JOGL
-            if (worldX + gamePanel.TILE_SIZE > gamePanel.getPlayer().worldX - gamePanel.getPlayer().screenX
-                    || worldX - gamePanel.TILE_SIZE > gamePanel.getPlayer().worldX + gamePanel.getPlayer().screenX
-                    || worldY + gamePanel.TILE_SIZE > gamePanel.getPlayer().worldY - gamePanel.getPlayer().screenY
-                    || worldY - gamePanel.TILE_SIZE > gamePanel.getPlayer().worldY + gamePanel.getPlayer().screenY) {
+            if (worldX + TILE_SIZE > gamePanel.getPlayer().worldX - gamePanel.getPlayer().screenX
+                    || worldX - TILE_SIZE > gamePanel.getPlayer().worldX + gamePanel.getPlayer().screenX
+                    || worldY + TILE_SIZE > gamePanel.getPlayer().worldY - gamePanel.getPlayer().screenY
+                    || worldY - TILE_SIZE > gamePanel.getPlayer().worldY + gamePanel.getPlayer().screenY) {
 
                 graphics2D.drawImage(tileLibrary[tileNum].getImage(), screenX, screenY, null);
 

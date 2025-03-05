@@ -1,7 +1,9 @@
 package lu.embellished_duck.dreamscape_engine.physics;
 
-import lu.embellished_duck.dreamscape_engine.actor.Entity;
+import lu.embellished_duck.dreamscape_engine.actor.entity.Entity;
 import lu.embellished_duck.dreamscape_engine.core.GamePanel;
+
+import static lu.embellished_duck.dreamscape_engine.core.GamePanel.TILE_SIZE;
 
 public class CollisionDetector {
 
@@ -40,10 +42,10 @@ public class CollisionDetector {
         int entityTopWorldY = entity.worldY + entity.getHitBox().y;
         int entityBottomWorldY = entity.worldY + entity.getHitBox().y + entity.getHitBox().height;
 
-        int entityLeftCol = entityLeftWorldX / gamePanel.TILE_SIZE;
-        int entityRightCol = entityRightWorldX / gamePanel.TILE_SIZE;
-        int entityTopRow = entityTopWorldY / gamePanel.TILE_SIZE;
-        int entityBottomRow = entityBottomWorldY / gamePanel.TILE_SIZE;
+        int entityLeftCol = entityLeftWorldX / TILE_SIZE;
+        int entityRightCol = entityRightWorldX / TILE_SIZE;
+        int entityTopRow = entityTopWorldY / TILE_SIZE;
+        int entityBottomRow = entityBottomWorldY / TILE_SIZE;
 
         int tileNum1, tileNum2;
 
@@ -51,7 +53,7 @@ public class CollisionDetector {
 
             case UP :
 
-                entityTopRow = (entityTopWorldY - entity.getMovementSpeed()) / gamePanel.TILE_SIZE;
+                entityTopRow = (entityTopWorldY - entity.getMovementSpeed()) / TILE_SIZE;
 
                 //This essentially predicts where the player will be and checks for collision with the if statement
                 tileNum1 = gamePanel.getTileManager().getWorldManager().mapTileNum[entityLeftCol][entityTopRow];
@@ -67,7 +69,7 @@ public class CollisionDetector {
 
             case DOWN :
 
-                entityBottomRow = (entityBottomWorldY + entity.getMovementSpeed()) / gamePanel.TILE_SIZE;
+                entityBottomRow = (entityBottomWorldY + entity.getMovementSpeed()) / TILE_SIZE;
 
                 tileNum1 = gamePanel.getTileManager().getWorldManager().mapTileNum[entityLeftCol][entityBottomRow];
                 tileNum2 = gamePanel.getTileManager().getWorldManager().mapTileNum[entityRightCol][entityBottomRow];
@@ -82,7 +84,7 @@ public class CollisionDetector {
 
             case LEFT :
 
-                entityLeftCol = (entityLeftWorldX - entity.getMovementSpeed()) / gamePanel.getTILE_SIZE();
+                entityLeftCol = (entityLeftWorldX - entity.getMovementSpeed()) / TILE_SIZE;
 
                 tileNum1 = gamePanel.getTileManager().getWorldManager().mapTileNum[entityLeftCol][entityTopRow];
                 tileNum2 = gamePanel.getTileManager().getWorldManager().mapTileNum[entityLeftCol][entityBottomRow];
@@ -97,7 +99,7 @@ public class CollisionDetector {
 
             case RIGHT :
 
-                entityRightCol = (entityRightWorldX + entity.getMovementSpeed()) / gamePanel.getTILE_SIZE();
+                entityRightCol = (entityRightWorldX + entity.getMovementSpeed()) / TILE_SIZE;
 
                 tileNum1 = gamePanel.getTileManager().getWorldManager().mapTileNum[entityRightCol][entityTopRow];
                 tileNum2 = gamePanel.getTileManager().getWorldManager().mapTileNum[entityRightCol][entityBottomRow];

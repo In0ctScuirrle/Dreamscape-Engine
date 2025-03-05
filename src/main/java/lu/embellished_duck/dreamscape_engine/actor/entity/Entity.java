@@ -1,4 +1,4 @@
-package lu.embellished_duck.dreamscape_engine.actor;
+package lu.embellished_duck.dreamscape_engine.actor.entity;
 
 import lombok.Getter;
 import lombok.Setter;
